@@ -63,6 +63,18 @@
     }
     .cloud.one { left: 65px; }
     .cloud.two { right: 110px; top: 85px; transform: scale(.7); }
+    #victory {
+      display: none;
+      position: absolute;
+      z-index: 3;
+      top: 36%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      font-weight: 900;
+      white-space: nowrap;
+      color: #17331e;
+    }
 
     #terrain {
       position: absolute;
@@ -213,6 +225,7 @@
     <div id="world" aria-label="A blocky game level with a lava pit and stone block">
       <div class="cloud one"></div>
       <div class="cloud two"></div>
+      <div id="victory" aria-hidden="true">🏆 Victory!</div>
       <div id="terrain" aria-hidden="true"></div>
       <div class="stone-block" aria-hidden="true"></div>
       <div class="emerald" aria-hidden="true"></div>
@@ -244,6 +257,7 @@
     const terrain = document.querySelector("#terrain");
     const player = document.querySelector("#player");
     const message = document.querySelector("#message");
+    const victory = document.querySelector("#victory");
 
     let playerColumn = 0;
     let isJumping = false;
@@ -288,6 +302,7 @@
       if (playerColumn === level.length - 1) {
         hasWon = true;
         message.textContent = "You made it! The emerald goal is yours!";
+        victory.style.display = "block";
       }
     }
 
@@ -302,6 +317,7 @@
       jumpTimer = setTimeout(() => {
         isJumping = false;
         player.classList.remove("jumping");
+        if (hasWon) return;
 
         if (level[playerColumn] === "lava") {
           fallInLava();
@@ -330,6 +346,7 @@
       playerColumn = 0;
       isJumping = false;
       hasWon = false;
+      victory.style.display = "none";
       player.classList.remove("jumping");
       updatePlayer();
       message.textContent = "Use ← and → to move. Press Space or ↑ to jump.";
